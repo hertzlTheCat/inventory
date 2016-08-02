@@ -1,10 +1,7 @@
 package org.itai.inventory.impl;
 
-import org.itai.inventory.Item;
-
-public class SimpleItem implements Item 
+public class SimpleItem extends AbstractItem
 {
-	private long id;
 	private String description;
 	private int quantity;
 	private boolean discarded;
@@ -16,11 +13,6 @@ public class SimpleItem implements Item
 		this.discarded = false;
 	}
 	
-	public long getId() 
-	{
-		return this.id;
-	}
-
 	public String getDescription() 
 	{
 		return this.description;
