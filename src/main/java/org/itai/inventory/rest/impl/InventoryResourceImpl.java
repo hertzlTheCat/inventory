@@ -1,4 +1,4 @@
-package org.itai.inventory.rest;
+package org.itai.inventory.rest.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,48 +7,36 @@ import java.net.URI;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
 import org.itai.inventory.Item;
 import org.itai.inventory.impl.SimpleItem;
+import org.itai.inventory.rest.InventoryResource;
 
-@Path("/items")
-public class InventoryResouce
+public class InventoryResourceImpl implements InventoryResource
 {
     // TODO change to JSON
 
     private Map<Long, Item> items;
 
-    public InventoryResouce()
+    public InventoryResourceImpl()
     {
         this.loadItems();
     }
 
-    @POST
-    @Consumes("application/xml")
-    public void createItem(InputStream is)
+    @Override
+    public Response createItem(InputStream is)
     {
-        // TODO read is
-        Item item = new SimpleItem("dummy", 1);
-        items.put(item.getId(), item);
-
-        Response.created(URI.create("/items/" + item.getId())).build();
+        System.out.println("create item ");
+        return Response.created(URI.create("/items/0")).build();
     }
 
-    @GET
-    @Path("{id}")
-    @Produces("application/xml")
-    public StreamingOutput getCustomer(@PathParam("id") long id)
+    @Override
+    public StreamingOutput getItem(long id)
     {
+        System.out.println("get: " + id);
         Item item = this.items.get(id);
         if (item == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
@@ -62,11 +50,10 @@ public class InventoryResouce
         };
     }
 
-    @PUT
-    @Path("{id}")
-    @Consumes("application/xml")
-    public void updateItem(@PathParam("id") long id, InputStream is)
+    @Override
+    public void updateItem(long id, InputStream is)
     {
+        System.out.println("update: " + id);
         Item item = this.items.get(id);
         if (item == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
